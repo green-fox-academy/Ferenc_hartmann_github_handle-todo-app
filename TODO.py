@@ -11,6 +11,9 @@ class ToDo():
         self.data_append = 0
         self.line_to_delete = 0
         self.data_write = 0
+        self.line_to_check = 0
+        self.todo_checking_before = 0
+        self.todo_checking_after = 0
     def controller(self):
         if len(sys.argv) > 1:
             if sys.argv[1] == "-l":
@@ -29,9 +32,15 @@ class ToDo():
                 self.control = 3
                 self.database_reader()
             elif sys.argv[1] == "-c":
+                if len(sys.argv) > 2:
+                    self.line_to_check = sys.argv[2]
+#                elif len(sys.argv) == 2:
+#                    self.no_remove_printer()
                 self.control = 4
                 self.database_reader()
             else:
+                if len(sys.argv) == 2:
+                    self.argument_printer()
                 self.help_printer()
         else:
             self.help_printer()
@@ -67,6 +76,9 @@ class ToDo():
     def no_remove_no_integer(self):
         print("Unable to remove: index is not a number")
 
+    def argument_printer(self):
+        print("\nUnsupported argument \n")
+
     def database_reader(self):
         self.data = open("todo_db.txt", "r")
         self.data2 = self.data.readlines()
@@ -89,6 +101,8 @@ class ToDo():
             self.add_todo_list()
         if self.control == 3:
             self.line_deleter()
+        if self.control == 4:
+            self.checker()
 
     def add_todo_list(self):
         if self.new_todo == 0:
@@ -113,11 +127,17 @@ class ToDo():
         if isinstance(self.line_to_delete, str) == True:
             self.no_remove_no_integer()
 
+    def checker(self):
+        while True:
+            try:
+                if int(self.line_to_check) >= 1 and int(self.line_to_check) < len(self.data2):
+                    self.todo_checking_before = self.data2[(int(self.line_to_check)-1)].split("Đ")[0]
+                    self.todo_checking_after =  ("Đ" + str(self.todo_checking_before))
+                break
+            except:
+                break
 
-#Unable to remove: index is not a number
 
-
-
-
+        print(self.todo_checking_after)
 teve = ToDo()
 teve.controller()
