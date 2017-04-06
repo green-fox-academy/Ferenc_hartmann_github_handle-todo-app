@@ -9,6 +9,8 @@ class ToDo():
         self.data2 = 0
         self.predone_list = []
         self.data_append = 0
+        self.line_to_delete = 0
+        self.data_write = 0
     def controller(self):
         if len(sys.argv) > 1:
             if sys.argv[1] == "-l":
@@ -20,6 +22,10 @@ class ToDo():
                 self.control = 2
                 self.database_reader()
             elif sys.argv[1] == "-r":
+                if len(sys.argv) > 2:
+                    self.line_to_delete = sys.argv[2]
+                elif len(sys.argv) == 2:
+                    self.no_remove_printer()
                 self.control = 3
                 self.database_reader()
             elif sys.argv[1] == "-c":
@@ -55,6 +61,12 @@ class ToDo():
     def no_add_printer(self):
         print("Unable to add: no task provided")
 
+    def no_remove_printer(self):
+        print("Unable to remove: no index provided")
+
+    def no_remove_no_integer(self):
+        print("Unable to remove: index is not a number")
+
     def database_reader(self):
         self.data = open("todo_db.txt", "r")
         self.data2 = self.data.readlines()
@@ -71,11 +83,12 @@ class ToDo():
                 break
             except:
                 break
-        print(self.done_list)
         if self.control == 1:
             self.normal_printer()
         if self.control == 2:
             self.add_todo_list()
+        if self.control == 3:
+            self.line_deleter()
 
     def add_todo_list(self):
         if self.new_todo == 0:
@@ -84,6 +97,24 @@ class ToDo():
             self.data_append = open("todo_db.txt", "a")
             self.data_append.write(str(self.new_todo) + "Đ" + "\n")
 
+    def line_deleter(self):
+        while True:
+            try:
+                if int(self.line_to_delete) >= 1 and int(self.line_to_delete) < len(self.data2):
+                    del self.data2[int(self.line_to_delete)-1]
+                    self.data_write = open("todo_db.txt", "w")
+                    for lines in self.data2:
+                        self.data_write.write(lines)
+                if int(self.line_to_delete) > len(self.data2):
+                    print("Unable to remove: index is out of bound")
+                break
+            except:
+                break
+        if isinstance(self.line_to_delete, str) == True:
+            self.no_remove_no_integer()
+
+
+#Unable to remove: index is not a number
 
 
 
