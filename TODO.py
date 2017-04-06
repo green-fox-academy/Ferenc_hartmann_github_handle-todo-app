@@ -46,8 +46,11 @@ class ToDo():
             print("No todos for today! :)")
         else:
             for todo in self.todo_list:
-                print(str(a) + " - " + str(todo))
-                a +=1
+                if todo == "":
+                    pass
+                else:
+                    print(str(a) + " - " + str(todo))
+                    a +=1
 
     def no_add_printer(self):
         print("Unable to add: no task provided")
@@ -56,9 +59,19 @@ class ToDo():
         self.data = open("todo_db.txt", "r")
         self.data2 = self.data.readlines()
         self.todo_list = [i.split("Đ")[0] for i in self.data2]
-        self.predone_list = [i.split("Đ")[1] for i in self.data2]
-        self.done_list = [i.split("\n")[0] for i in self.predone_list]
-
+        while True:
+            try:
+                self.predone_list = [i.split("Đ")[1] for i in self.data2]
+                break
+            except:
+                break
+        while True:
+            try:
+                self.done_list = [i.split("\n")[0] for i in self.predone_list]
+                break
+            except:
+                break
+        print(self.done_list)
         if self.control == 1:
             self.normal_printer()
         if self.control == 2:
@@ -69,7 +82,7 @@ class ToDo():
             self.no_add_printer()
         else:
             self.data_append = open("todo_db.txt", "a")
-            self.data_append.write(str(self.new_todo) + " Đ " + "\n")
+            self.data_append.write(str(self.new_todo) + "Đ" + "\n")
 
 
 
